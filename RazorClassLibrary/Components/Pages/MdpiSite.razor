@@ -1,0 +1,66 @@
+﻿@page "/mdpisite"
+
+@using WebScrapeApp.ArticleServices
+@using WebScrapeApp.Services
+
+<PageTitle>Scrape</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="text-center">Web Scraping Tool</h2>
+    <p class="text-muted text-center">Enter your search criteria and extract data effortlessly.</p>
+
+    <div class="form-group mt-4">
+        <label for="searchText">Search Text</label>
+        <input id="searchText" class="form-control" @bind="searchText" placeholder="Enter search text" />
+    </div>
+
+    <div class="form-row mt-3">
+        <div class="col">
+            <label for="fromYear">From Year</label>
+            <input id="fromYear" type="number" class="form-control" @bind="fromYear" placeholder="Enter from year" />
+        </div>
+        <div class="col">
+            <label for="toYear">To Year</label>
+            <input id="toYear" type="number" class="form-control" @bind="toYear" placeholder="Enter to year" />
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" @onclick="RunAutomation">Extract</button>
+    </div>
+
+    <div class="mt-4 text-center">
+        <span class="text-success">@returnStatus</span>
+    </div>
+</div>
+
+@code {
+    private string searchText;
+    private int? fromYear;
+    private int? toYear;
+    private ScrapeResult scrapeResult = new ScrapeResult();
+    private string returnStatus = string.Empty;
+
+    private async Task RunAutomation()
+    {
+        try
+        {
+            returnStatus = string.Empty; // Reset return status
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                Mdpi mdpi = new Mdpi();
+                await mdpi.RunAutomation(searchText, fromYear.ToString(), toYear.ToString());
+                returnStatus = "Extraction completed successfully!";
+            }
+            else
+            {
+                returnStatus = "Please enter a search text.";
+            }
+        }
+        catch (Exception ex)
+        {
+            returnStatus = $"Error: {ex.Message}";
+            Console.WriteLine($"Error: {ex.Message}"); // Log any errors
+        }
+    }
+}

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.31.0" />
+  </ItemGroup>
+
+</Project>

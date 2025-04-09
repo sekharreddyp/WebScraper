@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot/**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="8.0.100" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RazorClassLibrary\RazorClassLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

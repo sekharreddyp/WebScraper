@@ -1,0 +1,142 @@
+﻿<h3>Scrape URL</h3>
+
+@page "/scrape"
+
+@using WebScrapeApp.Services
+@inject WebScrapeService webScrapeService
+
+<PageTitle>Scrape</PageTitle>
+
+<div class="container mt-4">
+    <div class="form-group">
+        <label for="siteSelect">Select a Site</label>
+        <select id="siteSelect" class="form-control" @onchange="UpdateUrl">
+            <option value="">Select a site</option>
+            @foreach (var site in sites)
+            {
+                <option value="@site">@site</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="urlInput">Enter URL</label>
+        <input id="urlInput" class="form-control" @bind="url" placeholder="Enter URL" />
+    </div>
+
+    <button class="btn btn-primary mt-3" @onclick="ScrapeUrl" disabled="@isScraping">
+        @if (isScraping)
+        {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span>Scraping...</span>
+        }
+        else
+        {
+            <span>Click me</span>
+        }
+    </button>
+
+    <div class="mt-3 text-success">@returnStatus</div>
+
+    @if (scrapeResult != null)
+    {
+        <div class="mt-4">
+            <h5>Scrape Results</h5>
+            <div>
+                <strong>URL:</strong>
+                <p>@scrapeResult.Url</p>
+            </div>
+            @if (scrapeResult.Emails?.Count > 0)
+            {
+                <div>
+                    <strong>Email Results:</strong>
+                    <ul>
+                        @foreach (var email in scrapeResult.Emails)
+                        {
+                            <li>@email</li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if (scrapeResult.Links?.Count > 0)
+            {
+                <div>
+                    <strong>Links:</strong>
+                    <ul>
+                        @foreach (var link in scrapeResult.Links)
+                        {
+                            <li>@link</li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(scrapeResult.Content))
+            {
+                <div>
+                    <strong>Scraped Content:</strong>
+                    <p>@scrapeResult.Content</p>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private string url = string.Empty;
+    private ScrapeResult scrapeResult;
+    private string returnStatus = string.Empty;
+    private bool isScraping = false;
+    private readonly string[] sites = new[]
+    {
+        "https://journals.sagepub.com/",
+        "https://www.springer.com/",
+        "https://www.nature.com",
+        "https://pubs.acs.org/journal/jacsat",
+        "https://journals.aps.org/prl",
+        "https://www.tandfonline.com/",
+        "https://onlinelibrary.wiley.com/",
+        "https://journals.plos.org/plosone/",
+        "https://www.hindawi.com/",
+        "https://www.sciencedirect.com/",
+        "https://pubs.acs.org/",
+        "https://link.springer.com/",
+        "https://academic.oup.com/journals/",
+        "https://www.elsevier.com/",
+        "https://pubmed.ncbi.nlm.nih.gov/advanced/",
+        "https://europepmc.org/"
+    };
+
+    private void UpdateUrl(ChangeEventArgs e)
+    {
+        url = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task ScrapeUrl()
+    {
+        if (string.IsNullOrEmpty(url))
+        {
+            returnStatus = "Please enter a valid URL.";
+            return;
+        }
+
+        isScraping = true;
+        returnStatus = string.Empty;
+        scrapeResult = null;
+        StateHasChanged();
+
+        try
+        {
+            scrapeResult = await webScrapeService.ScrapUrlDynamic(url);
+            returnStatus = "Scraping completed successfully!";
+        }
+        catch (Exception ex)
+        {
+            returnStatus = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isScraping = false;
+            StateHasChanged();
+        }
+    }
+}

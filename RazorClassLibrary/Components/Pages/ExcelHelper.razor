@@ -1,0 +1,79 @@
+﻿@page "/excelhelper"
+@using WebScrapeApp.Services
+
+<PageTitle>Excel Helper</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="text-center">Excel Helper</h2>
+    <p class="text-muted text-center">Upload an Excel file, remove duplicate emails, and download the updated file.</p>
+
+    <div class="mb-3">
+        <InputFile OnChange="HandleFileSelected" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="ProcessFile" disabled="@(!isFileSelected)">Process File</button>
+
+    @if (!string.IsNullOrEmpty(downloadUrl))
+    {
+        <div class="mt-3">
+            <a class="btn btn-success" href="@downloadUrl" download>Download Processed File</a>
+        </div>
+    }
+</div>
+
+@code {
+    private IBrowserFile? uploadedFile;
+    private string? downloadUrl;
+    private bool isFileSelected = false;
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        uploadedFile = e.File;
+        isFileSelected = uploadedFile != null;
+
+        // Only reset the downloadUrl if a new file is selected
+        if (isFileSelected)
+        {
+            downloadUrl = null;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task ProcessFile()
+    {
+        if (uploadedFile == null)
+        {
+            return;
+        }
+
+        // Save the uploaded file to a publicly accessible location
+        string wwwrootPath = Path.Combine(Environment.CurrentDirectory, "wwwroot", "uploads");
+
+        // Ensure the directory exists
+        if (!Directory.Exists(wwwrootPath))
+        {
+            Directory.CreateDirectory(wwwrootPath);
+        }
+
+        var tempFilePath = Path.Combine(wwwrootPath, uploadedFile.Name);
+
+        // Ensure the file name is unique and delete if exists
+        if (File.Exists(tempFilePath))
+        {
+            File.Delete(tempFilePath);
+        }
+
+        await using (var stream = new FileStream(tempFilePath, FileMode.Create))
+        {
+            await uploadedFile.OpenReadStream().CopyToAsync(stream);
+        }
+
+        // Call the RemoveDuplicateEmails method
+        ExcelHelpers.RemoveDuplicateEmails(tempFilePath);
+
+        // Generate a download URL for the processed file
+        downloadUrl = $"/uploads/{uploadedFile.Name}";
+    }
+
+}
