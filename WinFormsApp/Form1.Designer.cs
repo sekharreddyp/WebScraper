@@ -71,6 +71,8 @@ namespace WinFormsApp
             this.Controls.Add(this.blazorWebView);
             this.Name = "Form1";
             this.Text = "Lets Scrape";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 
         }
