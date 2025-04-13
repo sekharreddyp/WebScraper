@@ -8,6 +8,8 @@ using System.Data;
 using ClosedXML.Excel;
 using System.Threading.Tasks;
 using WebScrapeApp.Services;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace WebScrapeApp.ArticleServices
 {
@@ -171,11 +173,28 @@ namespace WebScrapeApp.ArticleServices
                         exportButton.Click();
                         //Task.Delay(3000).Wait();
 
-                        // Click the next button
-                        IWebElement pagenumber = driver.FindElement(By.Id("pager-page-number"));
-                        pagenumber.Clear();
-                        pagenumber.SendKeys((i + 1).ToString());
-                        pagenumber.SendKeys(Keys.Enter);
+                        if (i < totalPages)
+                        {
+                            if (totalPages > 10)
+                            {
+                                IWebElement pagenumber = driver.FindElement(By.Id("pager-page-number"));
+                                pagenumber.Clear();
+                                pagenumber.SendKeys((i + 1).ToString());
+                                pagenumber.SendKeys(Keys.Enter);
+                            }
+                            else
+                            {
+                                string nextButtonXPath = $"//*[@id='exportArticles']/div/div[3]/div/div[2]/div[2]/div/a[normalize-space(text())='{i + 1}']";
+                                //string nextButtonXPath = $"//*[@id=\"exportArticles\"]/div/div[3]/div/div[2]/div[2]/div/a[{j + 1}]";
+                                IWebElement nextButton = driver.FindElement(By.XPath(nextButtonXPath));
+                                // Scroll the element into view
+                                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", nextButton);
+
+                                wait.Until(ExpectedConditions.ElementToBeClickable(nextButton));
+                                nextButton.Click();
+                            }
+                        }
+
 
                         // Wait for the next page to load
                         //Task.Delay(1000).Wait();
@@ -323,12 +342,12 @@ namespace WebScrapeApp.ArticleServices
             // Optionally, delete the .txt files after processing
             foreach (string file in txtFiles)
             {
-                File.Delete(file);
+                //File.Delete(file);
             }
         }
 
         //remove duplecate emails from excel
-        
+
 
     }
 }

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{7240E892-D3B6-4ABB-BE0A-888A9FB91168}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorClassLibrary", "RazorClassLibrary\RazorClassLibrary.csproj", "{5B47F0C4-7723-4F4E-9C28-DB8916A1DE1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{1A309DC8-8D45-4EC7-B89A-A895C60F1CCC}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ScrapperSetup", "ScrapperSetup\ScrapperSetup.vdproj", "{DAFAA011-83F4-32F6-15E4-F7EEB5336F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,8 @@ Global
 		{1A309DC8-8D45-4EC7-B89A-A895C60F1CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A309DC8-8D45-4EC7-B89A-A895C60F1CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A309DC8-8D45-4EC7-B89A-A895C60F1CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAFAA011-83F4-32F6-15E4-F7EEB5336F4D}.Debug|Any CPU.ActiveCfg = Debug
+		{DAFAA011-83F4-32F6-15E4-F7EEB5336F4D}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
