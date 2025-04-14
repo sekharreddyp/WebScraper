@@ -333,6 +333,7 @@ namespace WebScrapeApp.ArticleServices
                         }
                         dataWorksheet.Cell(dataStartRow + i + k, 3).Value = datatable.Rows[i]["JOURNAL"].ToString();
                         dataWorksheet.Cell(dataStartRow + i + k, 4).Value = datatable.Rows[i]["TITLE"].ToString();
+                        dataStartRow++;
                     }
                 }
 

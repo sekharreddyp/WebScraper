@@ -1,0 +1,52 @@
+﻿@page "/sciencedirectsite"
+
+@using WebScrapeApp.ArticleServices
+@using WebScrapeApp.Services
+
+<PageTitle>Scrape</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="text-center">Web Scraping Tool - Science Direct</h2>
+    <p class="text-muted text-center">Enter your search criteria and extract data effortlessly.</p>
+
+    <div class="form-group mt-4">
+        <label for="searchText">Search Text</label>
+        <input id="searchText" class="form-control" @bind="searchText" placeholder="Enter search text" />
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" @onclick="RunAutomation">Extract</button>
+    </div>
+
+    <div class="mt-4 text-center">
+        <span class="text-success">@returnStatus</span>
+    </div>
+</div>
+
+@code {
+    private string searchText;
+    private string returnStatus = string.Empty;
+
+    private async Task RunAutomation()
+    {
+        try
+        {
+            returnStatus = string.Empty; // Reset return status
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                ScienceDirect sd = new ScienceDirect();
+                await sd.RunAutomation(searchText);
+                returnStatus = "Extraction completed successfully!";
+            }
+            else
+            {
+                returnStatus = "Please enter a search text.";
+            }
+        }
+        catch (Exception ex)
+        {
+            returnStatus = $"Error: {ex.Message}";
+            Console.WriteLine($"Error: {ex.Message}"); // Log any errors
+        }
+    }
+}
