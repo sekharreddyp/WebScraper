@@ -23,8 +23,8 @@ namespace WebScrapeApp.ArticleServices
             {
                 throw new Exception("Search text is empty");
             }
-            string username = "insblr001@outlook.com";
-            string password = "Sekhar@123";
+            string username = "icrnre-2025@pagesconferences.org";
+            string password = "Pages@123";
 
             string downloadDirectory = Path.Combine(DownloadRootPath, @"sciencedirect");
             // Ensure the directory exists
@@ -33,6 +33,7 @@ namespace WebScrapeApp.ArticleServices
 
             // Set Edge options for downloading files
             EdgeOptions options = new EdgeOptions();
+
             //options.AddArgument("--headless=new");
             options.AddUserProfilePreference("download.default_directory", downloadDirectory);
             options.AddUserProfilePreference("download.prompt_for_download", false);
@@ -49,7 +50,7 @@ namespace WebScrapeApp.ArticleServices
                 // Maximize the browser window
                 driver.Manage().Window.Maximize();
 
-                Task.Delay(5000).Wait();
+                Task.Delay(1000).Wait();
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                 //IWebElement closeGuideButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='pendo-close-guide-6d2f92bc']")));
@@ -64,13 +65,25 @@ namespace WebScrapeApp.ArticleServices
                 //if cookie page displays close it else skip and proceed next steps
                 try
                 {
-                    IWebElement cookieButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(text(), 'Accept All Cookies')]")));
-                    cookieButton.Click();
+                    //IWebElement cookiepane=wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id=\"onetrust-banner-sdk\"]")));
+                    ////*[@id="onetrust-accept-btn-handler"]
+                    //IWebElement cookieButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("//*[@id=\"onetrust-accept-btn-handler\"]")));
+                    //cookieButton.Click();
+                    Task.Delay(5000).Wait();
                 }
                 catch (NoSuchElementException)
                 {
                     // Cookie button not found, continue with the next steps
                 }
+
+                IWebElement loginUser = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("bdd-email")));
+                loginUser.SendKeys(username);
+                IWebElement usernameSubmit = driver.FindElement(By.Id("bdd-els-searchBtn"));
+                usernameSubmit.Click();
+
+                IWebElement loginPass = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("bdd-password")));
+                loginPass.SendKeys(username);
+                loginPass.SendKeys(Keys.Enter);
 
                 // Wait for the search results to load
                 IWebElement pageInfoDiv = driver.FindElement(By.XPath("//div[contains(text(), 'Displaying article') and contains(text(), 'on page')]"));
